@@ -1,6 +1,6 @@
 import React from "react";
-import type { Prediction } from "../lib/api";
-import { formatPercent01 } from "../lib/api";
+import type { Prediction } from "../lib/types";
+import { formatPercent01 } from "../lib/api"; // if you use it here
 
 // Normalize confidence to 0..1 whether backend sends 0.9953 or 99.53 or confidence_percent
 const to01 = (p?: number, pPercent?: number) => {
