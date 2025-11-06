@@ -1,16 +1,7 @@
+// src/components/PredictionCard.tsx
 import React from "react";
 import type { Prediction } from "../lib/types";
-import { formatPercent01 } from "../lib/api"; // if you use it here
-
-// Normalize confidence to 0..1 whether backend sends 0.9953 or 99.53 or confidence_percent
-const to01 = (p?: number, pPercent?: number) => {
-  if (typeof p === "number") return p > 1 ? p / 100 : p;
-  if (typeof pPercent === "number") return pPercent / 100;
-  return undefined;
-};
-
-const pct = (x?: number) =>
-  typeof x === "number" ? `${(x * 100).toFixed(1)}%` : "–";
+import { formatPercent01 } from "../lib/api";
 
 export function PredictionCard({
   imgUrl,
@@ -21,19 +12,6 @@ export function PredictionCard({
   prediction: Prediction | null;
   onReset: () => void;
 }) {
-  // Pick the best available label field
-  const label =
-    prediction?.label_pretty ??
-    (prediction as any)?.predicted_class_name ?? // legacy / Python field
-    prediction?.label ??
-    "—";
-
-  // Normalize confidence
-  const conf01 = to01(
-    prediction?.confidence as any,
-    (prediction as any)?.confidence_percent
-  );
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
       <div className="overflow-hidden rounded-2xl border bg-white">
@@ -56,17 +34,36 @@ export function PredictionCard({
 
           {prediction ? (
             <div className="mt-3 space-y-2">
+              {/* normalized label */}
               <div className="text-2xl font-bold tracking-tight">
-                {label}
+                {prediction.label}
               </div>
 
+              {/* normalized confidence */}
               <div className="text-sm text-neutral-600">
-                Confidence: {formatPercent01(prediction?.confidence01 ?? null)}
+                Confidence: {formatPercent01(prediction.confidence01)}
               </div>
-              {prediction?.timingsMs != null && (
+
+              {/* normalized timings */}
+              {prediction.timingsMs != null && (
                 <div className="text-sm text-neutral-600">
                   Latency: {prediction.timingsMs} ms
                 </div>
+              )}
+
+              {/* optional: show distribution if present */}
+              {prediction.probs && (
+                <details className="mt-2 text-sm">
+                  <summary className="cursor-pointer text-neutral-700">Details</summary>
+                  <ul className="mt-1 grid grid-cols-2 gap-x-4">
+                    {Object.entries(prediction.probs).map(([k, v]) => (
+                      <li key={k} className="flex justify-between">
+                        <span className="capitalize">{k}</span>
+                        <span>{(v * 100).toFixed(1)}%</span>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
               )}
             </div>
           ) : (
