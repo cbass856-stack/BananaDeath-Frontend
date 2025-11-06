@@ -34,24 +34,20 @@ export function PredictionCard({
 
           {prediction ? (
             <div className="mt-3 space-y-2">
-              {/* normalized label */}
               <div className="text-2xl font-bold tracking-tight">
                 {prediction.label}
               </div>
 
-              {/* normalized confidence */}
               <div className="text-sm text-neutral-600">
                 Confidence: {formatPercent01(prediction.confidence01)}
               </div>
 
-              {/* normalized timings */}
               {prediction.timingsMs != null && (
                 <div className="text-sm text-neutral-600">
                   Latency: {prediction.timingsMs} ms
                 </div>
               )}
 
-              {/* optional: show distribution if present */}
               {prediction.probs && (
                 <details className="mt-2 text-sm">
                   <summary className="cursor-pointer text-neutral-700">Details</summary>
@@ -83,3 +79,4 @@ export function PredictionCard({
     </div>
   );
 }
+
