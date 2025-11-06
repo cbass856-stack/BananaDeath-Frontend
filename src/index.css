@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* (optional) your custom tweaks */
+:root { --bd-bg: 250 250 248; }
+body {
+  background: linear-gradient(to bottom right, #fef9c3, #fef08a);
+}
