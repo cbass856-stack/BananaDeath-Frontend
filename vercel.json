@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "http://100.8.205.214:8000/$1" }
+    {
+      "source": "/api/(.*)",
+      "destination": "https://banana-api-578601129489.us-central1.run.app/$1"
+    }
   ]
 }
